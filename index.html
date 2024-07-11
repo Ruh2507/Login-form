@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eazypayouts Load Screen Mockup</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <!-- Logo and Navigation -->
+            <div class="logo">
+                <img src="https://is5-ssl.mzstatic.com/image/thumb/Purple113/v4/ae/b2/fb/aeb2fb31-d49d-1043-f9d9-a2fd02294a99/source/512x512bb.jpg" alt="Eazypayouts Logo">
+                
+                <nav>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <!-- End Logo and Navigation -->
+        </header>
+        
+        <main>
+            <!-- Dropdowns for Company and Account -->
+            <div class="dropdowns">
+                <label for="company">Select Company:</label>
+                <select id="company" onchange="populateAccounts()">
+                    <option value="">Select a company...</option>
+                    <option value="company1">Company 1</option>
+                    <option value="company2">Company 2</option>
+                    <!-- Add more companies as needed -->
+                </select>
+                
+                <label for="account">Select Account:</label>
+                <select id="account" onchange="displayAccountData()">
+                    <option value="">Select an account...</option>
+                    <!-- Account options will be populated dynamically -->
+                </select>
+            </div>
+            <!-- End Dropdowns -->
+            
+            <!-- Table to display account data -->
+            <div class="account-data">
+                <h2>Account Data</h2>
+                <table id="account-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Account data rows will be populated dynamically -->
+                    </tbody>
+                </table>
+            </div>
+            <!-- End Account Data Table -->
+        </main>
+        
+        <footer>
+            <p>&copy; 2024 Eazypayouts. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+<script>
+const accountsData = {
+    company1: {
+        account1: [
+            { date: '2024-07-01', description: 'Payment Received', amount: 1000 },
+            { date: '2024-07-02', description: 'Purchase', amount: -500 }
+        ],
+        account2: [
+            { date: '2024-07-03', description: 'Payment Sent', amount: -700 },
+            { date: '2024-07-04', description: 'Refund', amount: 200 }
+        ]
+    },
+    company2: {
+        account1: [
+            { date: '2024-07-01', description: 'Deposit', amount: 1500 },
+            { date: '2024-07-02', description: 'Withdrawal', amount: -300 }
+        ],
+        account2: [
+            { date: '2024-07-03', description: 'Transfer In', amount: 800 },
+            { date: '2024-07-04', description: 'Transfer Out', amount: -500 }
+        ]
+    }
+};
+
+// Function to populate accounts based on selected company
+function populateAccounts() {
+    const companySelect = document.getElementById('company');
+    const accountSelect = document.getElementById('account');
+    const company = companySelect.value;
+
+    // Clear previous options
+    accountSelect.innerHTML = '<option value="">Select an account...</option>';
+
+    if (company && accountsData[company]) {
+        // Populate account options
+        Object.keys(accountsData[company]).forEach(account => {
+            const option = document.createElement('option');
+            option.value = account;
+            option.textContent = `Account ${account.split('account')[1]}`;
+            accountSelect.appendChild(option);
+        });
+    }
+}
+
+// Function to display account data based on selected account
+function displayAccountData() {
+    const accountSelect = document.getElementById('account');
+    const account = accountSelect.value;
+    const accountData = document.getElementById('account-table').querySelector('tbody');
+
+    // Clear previous account data
+    accountData.innerHTML = '';
+
+    if (account) {
+        // Populate account data table
+        accountsData[document.getElementById('company').value][account].forEach(data => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${data.date}</td>
+                <td>${data.description}</td>
+                <td>${data.amount}</td>
+            `;
+            accountData.appendChild(row);
+        });
+    }
+}
+</script>
